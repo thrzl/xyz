@@ -1,6 +1,5 @@
 ---
 import HTML from "../layouts/HTML.astro";
-import Links from "../components/Links.astro";
 const projects = [
     {
         name: "chiffrage",
@@ -43,17 +42,14 @@ const projects = [
 ---
 
 <HTML>
-    <main class="w-1/3">
-        <p>featured projects</p>
-        {
-            projects.map((project) => (
-                <div class="my-4">
-                    <a href={project.href}>{project.name}</a>
-                    {project.tags && <span>· {project.tags.join(" / ")}</span>}
-                    <p class="my-1">{project.description}</p>
-                </div>
-            ))
-        }
-        <Links />
-    </main>
+    <p>featured projects</p>
+    {
+        projects.map((project) => (
+            <div class="my-4">
+                <a href={project.href}>{project.name}</a>
+                {project.tags && <span>· {project.tags.join(" / ")}</span>}
+                <p class="my-1">{project.description}</p>
+            </div>
+        ))
+    }
 </HTML>
