@@ -11,7 +11,7 @@ const links = {
 <div class="flex flex-row gap-2">
     {
         Object.entries(links).map(([name, href]) => (
-            <a {href} data-active={Astro.url.pathname === href}>
+            <a {href} data-active={Astro.url.pathname.replace(/\/$/) === href}>
                 ~{name}
             </a>
         ))
