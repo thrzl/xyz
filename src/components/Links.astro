@@ -6,15 +6,14 @@ const links = {
     // work: "/work",
     // tunes: "/tunes",
 };
+let url = Astro.url.pathname;
+if (url !== "/") url = url.replace(/\/$/, "");
 ---
 
 <div class="flex flex-row gap-2">
     {
         Object.entries(links).map(([name, href]) => (
-            <a
-                {href}
-                data-active={Astro.url.pathname.replace(/\/$/, "") === href}
-            >
+            <a {href} data-active={url === href}>
                 ~{name}
             </a>
         ))
