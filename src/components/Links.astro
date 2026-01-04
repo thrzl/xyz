@@ -1,0 +1,19 @@
+---
+const links = {
+    about: "/",
+    // blog: "/blog",
+    projects: "/projects",
+    // work: "/work",
+    // tunes: "/tunes",
+};
+---
+
+<div class="flex flex-row gap-2">
+    {
+        Object.entries(links).map(([name, href]) => (
+            <a {href} data-active={Astro.url.pathname === href}>
+                ~{name}
+            </a>
+        ))
+    }
+</div>

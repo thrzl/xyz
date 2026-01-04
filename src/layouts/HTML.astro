@@ -1,0 +1,70 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>thrizzle</title>
+    </head>
+    <body class="min-h-screen flex flex-col gap-2 justify-center items-center">
+        <slot />
+    </body>
+</html>
+
+<style is:global>
+    * {
+        box-sizing: border-box;
+        cursor: default;
+    }
+    body {
+        font-family: "Helvetica Neue", sans-serif;
+    }
+    a[data-active="true"],
+    a:hover {
+        background-color: blue;
+        color: white;
+        cursor: pointer;
+    }
+    a {
+        color: blue;
+    }
+    a[href^="http"] {
+        white-space: nowrap;
+        text-wrap: wrap;
+    }
+
+    a[href^="http"]:hover::after {
+        filter: invert(1);
+    }
+    a[href^="http"]::after {
+        color: blue;
+        content: url("../assets/link.svg");
+        display: inline-block;
+        font-style: normal;
+        font-size: 0.5em;
+        position: relative;
+        margin-left: 0.1em;
+        -webkit-text-decoration: none;
+        text-decoration: none;
+        white-space: nowrap;
+        text-wrap: nowrap;
+        vertical-align: -0.2rem;
+    }
+</style>

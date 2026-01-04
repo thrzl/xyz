@@ -1,0 +1,59 @@
+---
+import HTML from "../layouts/HTML.astro";
+import Links from "../components/Links.astro";
+const projects = [
+    {
+        name: "chiffrage",
+        tags: ["rust", "tauri", "age"],
+        description: "cross-platform UI for the age encryption format, in rust",
+        href: "https://github.com/thrzl/chiffrage",
+        image: "https://lipsum.app/320x240",
+    },
+    {
+        name: "calore calore calore",
+        tags: ["cloudflare workers", "bun"],
+        description: "calculate and cache album art color palettes",
+        href: "https://github.com/thrzl/calore",
+        image: "https://lipsum.app/320x240",
+    },
+    {
+        name: "astro-resume",
+        tags: ["astro", "bun"],
+        description:
+            "simple toml-based resume builder using astro and puppeteer",
+        href: "https://github.com/thrzl/astro-resume",
+        image: "https://lipsum.app/320x240",
+    },
+    {
+        name: "cf-colorthief",
+        tags: ["typescript"],
+        description:
+            "version of colorthief that uses WASM-based image decoding for compatibility with cloudflare workers",
+        href: "https://github.com/thrzl/cf-colorthief",
+        image: "https://lipsum.app/320x240",
+    },
+    {
+        name: "spot2lb",
+        tags: ["rust", "spotify API", "listenbrainz"],
+        description:
+            "a small microservice that polls the spotify web API and scrobbles to listenbrainz, automatically attempting to match data",
+        href: "https://github.com/thrzl/spot2lb",
+    },
+];
+---
+
+<HTML>
+    <main class="w-1/3">
+        <p>featured projects</p>
+        {
+            projects.map((project) => (
+                <div class="my-4">
+                    <a href={project.href}>{project.name}</a>
+                    {project.tags && <span>· {project.tags.join(" / ")}</span>}
+                    <p class="my-1">{project.description}</p>
+                </div>
+            ))
+        }
+        <Links />
+    </main>
+</HTML>
