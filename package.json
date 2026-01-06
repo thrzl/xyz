@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "astro": "^5.16.6",
+    "culori": "^4.0.2",
     "unocss": "^66.5.12"
+  },
+  "devDependencies": {
+    "@types/culori": "^4.0.1"
   }
 }

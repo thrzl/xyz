@@ -1,5 +1,9 @@
 ---
+import Link from "../components/Link.astro";
 import HTML from "../layouts/HTML.astro";
+import { getAlbum } from "../lib/musicData";
+
+const album = await getAlbum();
 ---
 
 <HTML>
@@ -10,6 +14,24 @@ import HTML from "../layouts/HTML.astro";
     <p>
         see more of my work on <a href="https://github.com/thrzl">github</a>
     </p>
+    {
+        album && (
+            <p>
+                website colors from:{" "}
+                <Link href={`https://listenbrainz.org/release/${album.mbid}`}>
+                    {album.title.toLocaleLowerCase()}
+                </Link>{" "}
+                by{" "}
+                {album.artists?.map((artist) => (
+                    <Link
+                        href={`https://listenbrainz.org/artist/${artist.mbid}`}
+                    >
+                        {artist.name.toLocaleLowerCase()}
+                    </Link>
+                ))}
+            </p>
+        )
+    }
     <!-- <section class="mt-4">
             <span class="text-wrap break-words whitespace-nowrap">
                 <a href="https://age-encryption.org">age public key</a>: <p

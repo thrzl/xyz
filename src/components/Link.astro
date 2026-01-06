@@ -1,0 +1,11 @@
+---
+import Arrow from "../assets/link.svg";
+const { href } = Astro.props;
+const url = Astro.url.pathname;
+---
+
+<span>
+    <a {href} data-active={url === href}>
+        <slot />
+    </a>{href?.startsWith("http") && <Arrow class="link-arrow" />}</span
+>

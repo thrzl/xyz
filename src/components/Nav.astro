@@ -7,16 +7,11 @@ const links = {
     // work: "/work",
     // tunes: "/tunes",
 };
+import Link from "./Link.astro";
 let url = Astro.url.pathname;
 if (url !== "/") url = url.replace(/\/$/, "");
 ---
 
 <div class="flex flex-row gap-2">
-    {
-        Object.entries(links).map(([name, href]) => (
-            <a {href} data-active={url === href}>
-                ~{name}
-            </a>
-        ))
-    }
+    {Object.entries(links).map(([name, href]) => <Link {href}>~{name}</Link>)}
 </div>
