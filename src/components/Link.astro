@@ -5,7 +5,7 @@ const url = Astro.url.pathname;
 ---
 
 <span>
-    <a {href} data-active={url === href}>
+    <a {href} data-active={url.startsWith(href)}>
         <slot />
     </a>{href?.startsWith("http") && <Arrow class="link-arrow" />}</span
 >
