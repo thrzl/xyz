@@ -5,14 +5,16 @@ let url = Astro.url.pathname;
 if (url !== "/" && url.endsWith("/")) {
     url = url.slice(0, -1);
 }
+let isExternal = href.startsWith("http");
 ---
 
 <span class="inline-flex content-center items-center cursor-pointer">
-    <a {href} data-active={url === href} class="decoration-none"
+    <a
+        {href}
+        data-active={url === href}
+        class={`decoration-none ${isExternal ? "pl-0.5" : "px-0.5"}`}
         ><span class="inline underline cursor-pointer"><slot /></span>{
-            href?.startsWith("http") && (
-                <Arrow class="link-arrow cursor-pointer" />
-            )
+            isExternal && <Arrow class="link-arrow cursor-pointer" />
         }</a
     ></span
 >
