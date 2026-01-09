@@ -21,7 +21,7 @@ const album = await getAlbum();
     {
         album && (
             <p>
-                website colors from:{" "}
+                website colors from{" "}
                 <Link href={`https://listenbrainz.org/release/${album.mbid}`}>
                     {album.title.toLocaleLowerCase()}
                 </Link>{" "}
