@@ -1,0 +1,13 @@
+---
+title: "keyage"
+description: "an anonymous(*) keyserver for age keys"
+tags: ["rust", "age", "sql"]
+---
+
+keyage is a REST API written in rust that stores age public keys.
+
+it was originally intended for usage with MLKEM768-X25519 keys, as because it's essentially referencing two identities at once the public keys are extremely long, making sharing impractical.
+
+
+
+it support returning a variable amount of colors as well as saving stored colors for performance.
