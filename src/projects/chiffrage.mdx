@@ -4,17 +4,42 @@ description: "cross-platform UI for the age encryption format, prioritizing secu
 tags: ["rust", "tauri", "age"]
 ---
 
+import {Image} from "astro:assets"
+import chiffrageIcon from "@assets/imgs/projects/chiffrage/icon.png"
+
+<Image src={chiffrageIcon} alt="chiffrage logo" class="mx-auto w-16 block mt-4" />
+
 chiffrage is a cross-platform GUI for the [age encryption format](https://age-encryption/) that also provides key management features. it relies on the [rage](https://github.com/str4d/rage) crate, which is a rust implementation of the age format.
 
-the application itself relies on tauri, which is a cross platform framework that takes advantage of the system webview. it's similar to electron aside from: \
-1\) not bundling a browser/webview, and <br/>
-2\) being in rust
+## getting started
 
-alongside better performance (especially with all the crypto and I/O that's going on here) and smaller app sizes, using rust provides me with greater control over memory and security.
+### a short overview of age & asymmetric encryption
+age encryption uses [public-key (asymmetric) encryption](https://ssd.eff.org/glossary/public-key-encryption) in which you have a keypair:
+- your **public key** is safe to share. files encrypted to your public key will be possible to decrypt with...
+- your **private key**, which should NEVER be shared unless you want someone else to decrypt your files.
 
-## usage
+in short:
+- if you want to encrypt files to yourself, just encrypt them to your own key
+- if you want to encrypt files to others, you need their public key
 
-wip
+### key management
+chiffrage allows you to manage keys in one place rather than having to worry about keeping the text safe or organized. you can generate your first keypair by pressing "new keypair" after creating your vault:
+
+![home page](../assets/imgs/projects/chiffrage/empty-home.png)
+
+all that is required to generate a key is a name, in contrast to PGP's email requirement:
+
+![generate key](../assets/imgs/projects/chiffrage/generate-key.png)
+
+after generating your key, click on it to view its details:
+
+![key info](../assets/imgs/projects/chiffrage/key-info.png)
+
+from this dialog, you can share your public key, as well as export your keypair or remove it from the vault altogether.
+
+> did you notice? chiffrage defaults to quantum-resistant MLKEM768-X25519 keys, which unfortunately come at the cost of very long public keys and small but growing usage. using the "convert to x25519" button, you can view it as a standard (quantum-vulnerable) X25519 public key.
+
+you can also import keys from a file or from text using the "import key" button on the keys page.
 
 ## security
 
@@ -37,3 +62,5 @@ chiffrage will terrorize you quite a bit when trying to make decisions that may 
 - warnings when trying to mix them with standard X25519 keys
 - warnings + advice when creating poor passwords
 - password generation powered by the [EFF's large wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases), which has 7,776 words (for about ~10<sup>37</sup> combinations!)
+
+the code and full README are located [here](https://github.com/thrzl/chiffrage).
