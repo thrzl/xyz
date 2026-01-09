@@ -4,10 +4,14 @@ description: "an anonymous(*) keyserver for age keys"
 tags: ["rust", "age", "sql"]
 ---
 
-keyage is a REST API written in rust that stores age public keys.
+keyage is a service that stores age public keys.
 
 it was originally intended for usage with MLKEM768-X25519 keys, as because it's essentially referencing two identities at once the public keys are extremely long, making sharing impractical.
 
+to avoid linking an unnecessary amount of information to keys, fingerprints are used, roughly equivalent to `base32_lower(public_key)[:26]`. these fingerprints can be used to lookup keys, and can be shared in place of the raw key content.
 
+it is also possible to set a username/handle for your key account, although key-handle relations are one-to-one. handles are significantly more memorable than fingerprints, but it is important to note that this may make it possible to figure out who the owner of your keys are.
 
-it support returning a variable amount of colors as well as saving stored colors for performance.
+while the API is now feature-complete, there is currently no frontend and the API is not yet live.
+
+the code and full README are located [here](https://github.com/thrzl/keyage).
