@@ -1,6 +1,6 @@
 ---
 import HTML from "@layouts/HTML.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import Link from "@components/Link.astro";
 import { posts } from "@lib/garden";
 ---
 
@@ -11,10 +11,12 @@ import { posts } from "@lib/garden";
         {
             posts.map((post) => (
                 <div>
-                    <a class="mb-0" href={`garden/${post.data.slug}`}>
+                    <Link class="mb-0" href={`garden/${post.data.slug}`}>
                         {post.data.title}
-                    </a>
-                    <p class="italic op-50 mt-0">{post.data.description}</p>
+                    </Link>
+                    <p class="italic op-50 mt-0 px-0.5">
+                        {post.data.description}
+                    </p>
                 </div>
             ))
         }

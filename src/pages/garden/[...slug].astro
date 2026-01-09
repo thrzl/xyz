@@ -1,6 +1,6 @@
 ---
 import HTML from "@layouts/HTML.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
+import Link from "@components/Link.astro";
 import { posts } from "@lib/garden";
 import { render } from "astro:content";
 import { Image } from "astro:assets";
@@ -25,8 +25,6 @@ if (frontmatter.data.image) {
     const images = import.meta.glob(
         "../../assets/imgs/*.{jpg,jpeg,png,webp,avif}",
     );
-    console.log(images);
-    console.log(frontmatter.data.image);
     img = (await images[`../../assets/imgs/${frontmatter.data.image}`]()) as {
         default: ImageMetadata;
     };
@@ -46,11 +44,11 @@ const pubDate = dayjs(frontmatter.data.date);
             />
         )
     }
-    <a href="/garden">garden</a><span class="text-accent"> / </span><a
+    <Link href="/garden">garden</Link><span class="text-accent"> / </span><Link
         href={`/garden/${frontmatter.data.slug}`}
-        class="mb-0">{frontmatter.data.title}</a
+        class="mb-0">{frontmatter.data.title}</Link
     >
-    <div class="flex flex-row justify-between">
+    <div class="flex flex-row justify-between px-0.5">
         <p class="mt-0 italic op-50">{frontmatter.data.description}</p>
         <p class="op-50 italic m-0">
             {pubDate.format("MMMM DD, YYYY").toLocaleLowerCase()}
