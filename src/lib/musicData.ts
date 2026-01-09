@@ -46,6 +46,7 @@ type MinimalAlbum = {
 };
 
 let topAlbum: MinimalAlbum | undefined;
+let topAlbumColors: [number, number, number][];
 
 export async function getAlbum(): Promise<MinimalAlbum | undefined> {
   if (topAlbum) return topAlbum;
@@ -95,12 +96,15 @@ export async function getColors(
   album: MinimalAlbum | undefined,
 ): Promise<[number, number, number][]> {
   if (!album) return [];
+  if (topAlbumColors) return topAlbumColors;
   const paletteRes = await fetch(
     `https://calore.thrzl.xyz/?image=https://coverartarchive.org/release/${album?.mbid}/front`,
   );
 
   const { palette }: { palette: [number, number, number][] } =
     await paletteRes.json();
+
+  topAlbumColors = palette;
 
   return palette;
 }
