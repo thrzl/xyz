@@ -10,13 +10,11 @@ import { posts } from "@lib/garden";
     <div class="mb-4">
         {
             posts.map((post) => (
-                <div>
+                <div class="my-4">
                     <Link class="mb-0" href={`garden/${post.data.slug}`}>
                         {post.data.title}
                     </Link>
-                    <p class="italic op-50 mt-0 px-0.5">
-                        {post.data.description}
-                    </p>
+                    <p class="my-1">{post.data.description}</p>
                 </div>
             ))
         }
