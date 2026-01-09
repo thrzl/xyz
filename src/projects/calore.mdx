@@ -1,0 +1,17 @@
+---
+title: "calore"
+description: "calculate and cache album art color palettes from spotify, musicbrainz, and iTunes"
+tags: ["cloudflare workers", "bun", "kv"]
+---
+
+import Link from "@components/Link.astro"
+import {Image} from "astro:assets"
+import iphone13 from "@assets/blog-images/iphone-13.jpg"
+import iphone14 from "@assets/blog-images/iphone-14.jpg"
+export const components = {
+  a: Link,
+};
+
+calore is a REST API running on a cloudflare worker that calculates and caches cover art for albums on musicbrainz, spotify, and iTunes.
+
+it support returning a variable amount of colors as well as saving stored colors for performance.

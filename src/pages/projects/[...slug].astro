@@ -1,18 +1,20 @@
 ---
 import HTML from "@layouts/HTML.astro";
 import Link from "@components/Link.astro";
-import { posts } from "@lib/garden";
+import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import { Image } from "astro:assets";
-import dayjs from "dayjs";
+
+const projects = await getCollection("projects");
 
 export async function getStaticPaths() {
-    return posts.map((post) => ({
+    const projects = await getCollection("projects");
+    return projects.map((project) => ({
         params: {
-            slug: post.data.slug,
+            slug: project.data.slug,
         },
         props: {
-            frontmatter: post,
+            frontmatter: project,
         },
     }));
 }
@@ -29,8 +31,6 @@ if (frontmatter.data.image) {
         default: ImageMetadata;
     };
 }
-
-const pubDate = dayjs(frontmatter.data.date);
 ---
 
 <HTML>
@@ -44,15 +44,17 @@ const pubDate = dayjs(frontmatter.data.date);
             />
         )
     }
-    <Link href="/garden" active={false}>garden</Link><span class="text-accent">
+    <Link href="/projects" active={false}>projects</Link><span
+        class="text-accent"
+    >
         /
-    </span><Link href={`/garden/${frontmatter.data.slug}`} class="mb-0"
+    </span><Link href={`/projects/${frontmatter.data.slug}`} class="mb-0"
         >{frontmatter.data.title}</Link
     >
     <div class="flex flex-row justify-between px-0.5">
-        <p class="mt-0 italic op-50">{frontmatter.data.description}</p>
-        <p class="op-50 italic m-0">
-            {pubDate.format("MMMM DD, YYYY").toLocaleLowerCase()}
+        <p class="my-0 italic op-50">{frontmatter.data.description}</p>
+        <p class="op-50 italic m-0 w-max text-right text-nowrap flex items-end">
+            {frontmatter.data.tags.join(" / ")}
         </p>
     </div>
     <div class="mb-4 line-height-normal">

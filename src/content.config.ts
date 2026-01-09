@@ -27,4 +27,26 @@ const blog = defineCollection({
     })),
 });
 
-export const collections = { blog };
+const projects = defineCollection({
+  loader: glob({ base: "./src/projects", pattern: "**/*.{md,mdx}" }),
+  schema: z
+    .object({
+      title: z.string(),
+      slug: z.string().optional(),
+      url: z.string().optional(),
+      description: z.string(),
+      tags: z.array(z.string()).default([]),
+      image: z.string().optional(),
+    })
+    .transform((object) => {
+      const slug = object.slug || toSlug(object.title);
+      const url = object.url || `/projects/${slug}`;
+      return {
+        ...object,
+        slug,
+        url,
+      };
+    }),
+});
+
+export const collections = { blog, projects };

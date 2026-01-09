@@ -1,0 +1,61 @@
+---
+import HTML from "@layouts/HTML.astro";
+import Link from "@components/Link.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection("projects");
+// const projects = [
+//     {
+//         name: "chiffrage",
+//         tags: ["rust", "tauri", "age"],
+//         description:
+//             "cross-platform UI for the age encryption format, prioritizing security and good defaults",
+//         href: "https://github.com/thrzl/chiffrage",
+//         image: "https://lipsum.app/320x240",
+//     },
+//     {
+//         name: "keyage",
+//         tags: ["rust", "age", "sql"],
+//         description:
+//             "a keyserver for the age encryption format that only requires your public key; no email, no password, optional username",
+//         href: "https://github.com/thrzl/keyage",
+//         image: "https://lipsum.app/320x240",
+//     },
+//     {
+//         name: "calore calore calore",
+//         tags: ["cloudflare workers", "bun", "kv"],
+//         description:
+//             "calculate and cache album art color palettes from spotify, musicbrainz, and iTunes",
+//         href: "https://github.com/thrzl/calore",
+//         image: "https://lipsum.app/320x240",
+//     },
+//     {
+//         name: "cf-colorthief",
+//         tags: ["typescript", "wasm"],
+//         description:
+//             "version of colorthief that uses WASM-based image decoding for compatibility with cloudflare workers",
+//         href: "https://github.com/thrzl/cf-colorthief",
+//         image: "https://lipsum.app/320x240",
+//     },
+//     {
+//         name: "spot2lb",
+//         tags: ["rust", "spotify API", "listenbrainz"],
+//         description:
+//             "a small microservice that polls the spotify web API and scrobbles to listenbrainz, automatically attempting to match data",
+//         href: "https://github.com/thrzl/spot2lb",
+//     },
+// ];
+---
+
+<HTML>
+    <p>featured projects</p>
+    {
+        projects.map(({ data: project }) => (
+            <div class="my-4">
+                <Link href={project.url}>{project.title}</Link>
+                {project.tags && <span>· {project.tags.join(" / ")}</span>}
+                <p class="my-1">{project.description}</p>
+            </div>
+        ))
+    }
+</HTML>

@@ -1,0 +1,44 @@
+---
+title: "chiffrage"
+description: "cross-platform UI for the age encryption format, prioritizing security and good defaults"
+tags: ["rust", "tauri", "age"]
+---
+
+import Link from "@components/Link.astro"
+export const components = {
+  a: Link,
+};
+
+chiffrage is a cross-platform GUI for the [age encryption format](https://age-encryption/) that also provides key management features. it relies on the [rage](https://github.com/str4d/rage) crate, which is a rust implementation of the age format.
+
+the application itself relies on tauri, which is a cross platform framework that takes advantage of the system webview. it's similar to electron aside from: \
+1\) not bundling a browser/webview, and <br/>
+2\) being in rust
+
+alongside better performance (especially with all the crypto and I/O that's going on here) and smaller app sizes, using rust provides me with greater control over memory and security.
+
+## usage
+
+wip
+
+## security
+
+chiffrage employs a variety of security measures to keep your key data safe.
+
+### rest
+
+keys are stored in a <b>vault file</b> (serialized with CBOR) in which private keys are encrypted using a user provided password. the vault key is derived with argon2id, and stored private keys are encrypted with XChaCha20Poly1305 with a randomized nonce that is stored alongside the private key.
+
+an HMAC is calculated for the vault whenever it is modified, and it is verified whenever the vault is unlocked.
+
+### runtime
+
+furthermore, as keys are encrypted independently, an attacker cannot just get the entire encrypted vault contents out of memory. while fighting against memory attacks is not something that is particularly in scope (or possible), the app still provides some protections, most notably by zeroizing sensitive values (the vault key, private keys) when they're no longer in use, as well as locking them in memory to prevent them from being written to swap on the disk.
+
+### secure defaults
+
+chiffrage will terrorize you quite a bit when trying to make decisions that may sacrifice security. a short list of defaults are:
+- defaults to MLKEM768-X25519 keys, which are quantum-safe
+- warnings when trying to mix them with standard X25519 keys
+- warnings + advice when creating poor passwords
+- password generation powered by the [EFF's large wordlist](https://www.eff.org/deeplinks/2016/07/new-wordlists-random-passphrases), which has 7,776 words (for about ~10<sup>37</sup> combinations!)
