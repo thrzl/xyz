@@ -44,11 +44,9 @@ if (frontmatter.data.image) {
             />
         )
     }
-    <Link href="/projects" active={false}>projects</Link><span
-        class="text-accent"
-    >
+    <Link href="/projects">projects</Link><span class="text-accent">
         /
-    </span><Link href={`/projects/${frontmatter.data.slug}`} class="mb-0"
+    </span><Link active href={`/projects/${frontmatter.data.slug}`} class="mb-0"
         >{frontmatter.data.title}</Link
     >
     <div class="flex flex-row justify-between px-0.5">

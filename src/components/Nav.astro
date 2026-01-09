@@ -11,8 +11,20 @@ const links = {
 import Link from "./Link.astro";
 let url = Astro.url.pathname;
 if (url !== "/") url = url.replace(/\/$/, "");
+
+function linkIsActive(href: string) {
+    if (url === "/") return href === "/";
+
+    return url.split("/")[1] === href.split("/")[1];
+}
 ---
 
 <div class="flex flex-row gap-2">
-    {Object.entries(links).map(([name, href]) => <Link {href}>~{name}</Link>)}
+    {
+        Object.entries(links).map(([name, href]) => (
+            <Link active={linkIsActive(href)} {href}>
+                ~{name}
+            </Link>
+        ))
+    }
 </div>

@@ -46,7 +46,7 @@ const pubDate = dayjs(frontmatter.data.date);
     }
     <Link href="/garden" active={false}>garden</Link><span class="text-accent">
         /
-    </span><Link href={`/garden/${frontmatter.data.slug}`} class="mb-0"
+    </span><Link active href={`/garden/${frontmatter.data.slug}`} class="mb-0"
         >{frontmatter.data.title}</Link
     >
     <div class="flex flex-row justify-between px-0.5">
