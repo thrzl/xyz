@@ -9,8 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/mdx": "^4.3.13",
     "astro": "^5.16.6",
     "culori": "^4.0.2",
+    "dayjs": "^1.11.19",
     "unocss": "^66.5.12"
   },
   "devDependencies": {
