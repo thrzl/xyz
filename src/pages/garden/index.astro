@@ -2,6 +2,7 @@
 import HTML from "@layouts/HTML.astro";
 import Link from "@components/Link.astro";
 import { posts } from "@lib/garden";
+import dayjs from "dayjs";
 ---
 
 <HTML>
@@ -13,7 +14,13 @@ import { posts } from "@lib/garden";
                 <div class="my-4">
                     <Link class="mb-0" href={`garden/${post.data.slug}`}>
                         {post.data.title}
-                    </Link>
+                    </Link>{" "}
+                    <span class="op-50">
+                        ·{" "}
+                        {dayjs(post.data.date)
+                            .format("MMM DD, YYYY")
+                            .toLocaleLowerCase()}
+                    </span>
                     <p class="my-1">{post.data.description}</p>
                 </div>
             ))
