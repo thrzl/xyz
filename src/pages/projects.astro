@@ -5,28 +5,30 @@ const projects = [
     {
         name: "chiffrage",
         tags: ["rust", "tauri", "age"],
-        description: "cross-platform UI for the age encryption format, in rust",
+        description:
+            "cross-platform UI for the age encryption format, prioritizing security and good defaults",
         href: "https://github.com/thrzl/chiffrage",
         image: "https://lipsum.app/320x240",
     },
     {
+        name: "keyage",
+        tags: ["rust", "age", "sql"],
+        description:
+            "a keyserver for the age encryption format that only requires your public key; no email, no password, optional username",
+        href: "https://github.com/thrzl/keyage",
+        image: "https://lipsum.app/320x240",
+    },
+    {
         name: "calore calore calore",
-        tags: ["cloudflare workers", "bun"],
-        description: "calculate and cache album art color palettes",
+        tags: ["cloudflare workers", "bun", "kv"],
+        description:
+            "calculate and cache album art color palettes from spotify, musicbrainz, and iTunes",
         href: "https://github.com/thrzl/calore",
         image: "https://lipsum.app/320x240",
     },
     {
-        name: "astro-resume",
-        tags: ["astro", "bun"],
-        description:
-            "simple toml-based resume builder using astro and puppeteer",
-        href: "https://github.com/thrzl/astro-resume",
-        image: "https://lipsum.app/320x240",
-    },
-    {
         name: "cf-colorthief",
-        tags: ["typescript"],
+        tags: ["typescript", "wasm"],
         description:
             "version of colorthief that uses WASM-based image decoding for compatibility with cloudflare workers",
         href: "https://github.com/thrzl/cf-colorthief",
