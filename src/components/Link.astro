@@ -7,8 +7,12 @@ if (url !== "/" && url.endsWith("/")) {
 }
 ---
 
-<span class="inline-flex content-center items-center">
-    <a {href} data-active={url === href}><slot /></a>{
-        href?.startsWith("http") && <Arrow class="link-arrow" />
-    }</span
+<span class="inline-flex content-center items-center cursor-pointer">
+    <a {href} data-active={url === href} class="decoration-none"
+        ><span class="inline underline cursor-pointer"><slot /></span>{
+            href?.startsWith("http") && (
+                <Arrow class="link-arrow cursor-pointer" />
+            )
+        }</a
+    ></span
 >
