@@ -1,0 +1,22 @@
+---
+import HTML from "@layouts/HTML.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { posts } from "@lib/garden";
+---
+
+<HTML>
+    <p>blog</p>
+    <p>a collection of notes. largely opinions or project logs</p>
+    <div class="mb-4">
+        {
+            posts.map((post) => (
+                <div>
+                    <a class="mb-0" href={`garden/${post.data.slug}`}>
+                        {post.data.title}
+                    </a>
+                    <p class="italic op-50 mt-0">{post.data.description}</p>
+                </div>
+            ))
+        }
+    </div>
+</HTML>

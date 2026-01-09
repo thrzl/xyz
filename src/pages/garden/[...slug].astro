@@ -1,0 +1,72 @@
+---
+import HTML from "@layouts/HTML.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { posts } from "@lib/garden";
+import { render } from "astro:content";
+import { Image } from "astro:assets";
+import dayjs from "dayjs";
+
+export async function getStaticPaths() {
+    return posts.map((post) => ({
+        params: {
+            slug: post.data.slug,
+        },
+        props: {
+            frontmatter: post,
+        },
+    }));
+}
+
+const { frontmatter } = Astro.props;
+const { Content } = await render(frontmatter);
+
+let img = undefined;
+if (frontmatter.data.image) {
+    const images = import.meta.glob(
+        "../../assets/imgs/*.{jpg,jpeg,png,webp,avif}",
+    );
+    console.log(images);
+    console.log(frontmatter.data.image);
+    img = (await images[`../../assets/imgs/${frontmatter.data.image}`]()) as {
+        default: ImageMetadata;
+    };
+}
+
+const pubDate = dayjs(frontmatter.data.date);
+---
+
+<HTML>
+    {
+        img && (
+            <Image
+                src={img?.default}
+                class="w-100"
+                alt="header image"
+                class="block my-4 rounded-lg"
+            />
+        )
+    }
+    <a href="/garden">garden</a><span class="text-accent"> / </span><a
+        href={`/garden/${frontmatter.data.slug}`}
+        class="mb-0">{frontmatter.data.title}</a
+    >
+    <div class="flex flex-row justify-between">
+        <p class="mt-0 italic op-50">{frontmatter.data.description}</p>
+        <p class="op-50 italic m-0">
+            {pubDate.format("MMMM DD, YYYY").toLocaleLowerCase()}
+        </p>
+    </div>
+    <div class="mb-4 line-height-normal">
+        <Content />
+    </div>
+</HTML>
+
+<style is:global>
+    img {
+        width: 100%;
+        height: auto;
+    }
+    h2#footnote-label {
+        text-transform: lowercase;
+    }
+</style>
