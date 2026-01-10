@@ -1,6 +1,8 @@
 ---
 import HTML from "../layouts/HTML.astro";
 import Link from "@components/Link.astro";
+import publicKey from "../../public/pubkey-pq.txt?raw";
+import Encryptor from "@components/Encryptor.astro";
 ---
 
 <HTML>
@@ -16,5 +18,10 @@ import Link from "@components/Link.astro";
                 >pubkey-pq.txt</Link
             >
         </p>
+        <p>
+            you can also encrypt text to my PQ key here (requires ~30 KB of JS).
+            make sure you leave me your public key too
+        </p>
+        <Encryptor key={publicKey.trim()} />
     </div>
 </HTML>

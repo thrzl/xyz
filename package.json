@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.13",
+    "@fontsource-variable/geist-mono": "^5.2.7",
+    "age-encryption": "^0.3.0",
     "astro": "^5.16.6",
     "culori": "^4.0.2",
     "dayjs": "^1.11.19",

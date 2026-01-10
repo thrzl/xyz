@@ -1,0 +1,68 @@
+---
+let { key } = Astro.props;
+import "@fontsource-variable/geist-mono";
+---
+
+<script>
+    import { armor, Encrypter } from "age-encryption";
+
+    const form = document.getElementById("encryption-form") as HTMLFormElement;
+    const input = document.getElementById("plaintext") as HTMLTextAreaElement;
+    const submitButton = document.querySelector(
+        "button[type='submit']",
+    ) as HTMLTextAreaElement;
+
+    let encrypted = false;
+
+    async function encrypt(text: string) {
+        const encryptor = new Encrypter();
+
+        encryptor.addRecipient(form.dataset.key as string);
+        return armor.encode(await encryptor.encrypt(text));
+    }
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (encrypted) {
+            navigator.clipboard.writeText(input.value);
+            submitButton.innerText = "copied";
+            setTimeout(() => (submitButton.innerText = "copy"), 500);
+        } else {
+            input.value = await encrypt(input.value);
+            encrypted = true;
+            submitButton.innerText = "copy";
+        }
+    });
+
+    input.addEventListener("input", (e) => {
+        if (submitButton.innerText === "copy") {
+            submitButton.innerText = "encrypt";
+        }
+        submitButton.disabled = input.value.length === 0;
+        if (encrypted) encrypted = input.value.length !== 0;
+    });
+</script>
+
+<form id="encryption-form" data-key={key}>
+    <textarea
+        placeholder="your message here"
+        required
+        id="plaintext"
+        class="w-full h-24 bg-dominant b-accent b-solid b-2 rounded-sm"
+    ></textarea>
+    <button
+        type="submit"
+        class="w-full text-accent hover:bg-accent hover:text-secondary-text-color border-solid border-accent hover:border-accent text-[1rem] py-1 rounded-sm"
+        disabled>encrypt</button
+    >
+</form>
+
+<style>
+    button[disabled] {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    textarea {
+        font-family: "Geist Mono Variable", monospace;
+    }
+</style>
