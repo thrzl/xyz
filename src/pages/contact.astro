@@ -1,5 +1,6 @@
 ---
 import HTML from "../layouts/HTML.astro";
+import Link from "@components/Link.astro";
 ---
 
 <HTML>
@@ -8,5 +9,12 @@ import HTML from "../layouts/HTML.astro";
     <div class="mb-4">
         <p class="mb-1">age public key:{" "}</p><pre
             class="my-0 text-wrap break-words">age17kxed6vqrqpwwjcu7kt5vmzxtufm49295zczzhkr2wz96xke8vastqwsga</pre>
+        <p>
+            my <Link href="https://github.com/FiloSottile/age#post-quantum-keys"
+                >post-quantum</Link
+            > public key (preferred) can be found at <Link href="/pubkey-pq.txt"
+                >pubkey-pq.txt</Link
+            >
+        </p>
     </div>
 </HTML>
