@@ -5,6 +5,7 @@ import { posts } from "@lib/garden";
 import { render } from "astro:content";
 import { Image } from "astro:assets";
 import dayjs from "dayjs";
+import "@fontsource-variable/geist-mono";
 
 export async function getStaticPaths() {
     return posts.map((post) => ({
@@ -76,5 +77,9 @@ const pubDate = dayjs(frontmatter.data.date);
     }
     blockquote * {
         color: var(--secondaryTextColor);
+    }
+    pre,
+    code {
+        font-family: "Geist Mono Variable", monospace;
     }
 </style>

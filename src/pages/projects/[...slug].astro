@@ -4,6 +4,7 @@ import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import { Image } from "astro:assets";
+import "@fontsource-variable/geist-mono";
 
 const projects = await getCollection("projects");
 
@@ -80,5 +81,9 @@ if (frontmatter.data.image) {
     pre {
         padding: 0.5rem;
         border-radius: 10px;
+    }
+    pre,
+    code {
+        font-family: "Geist Mono Variable", monospace;
     }
 </style>
