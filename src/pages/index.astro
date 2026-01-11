@@ -7,17 +7,28 @@ const album = await getAlbum();
 ---
 
 <HTML description="research + development @ ey3.tech. rust, svelte, python">
-    <h1>thrzl</h1>
-    <p>
-        research + development @ <Link href="https://ey3.tech"
-            >ey3 technologies</Link
+    <div class="h-card">
+        <h1 class="p-name">thrzl</h1>
+        <a
+            class="u-url"
+            href="https://thrzl.xyz"
+            hidden
+            aria-hidden="true"
+            rel="me">thrzl</a
         >
-    </p>
-    <p>
-        see more of my work on <Link href="https://github.com/thrzl"
-            >github</Link
-        >
-    </p>
+        <p>
+            research + development @ <Link href="https://ey3.tech" class="p-org"
+                >ey3 technologies</Link
+            >
+        </p>
+        <p>
+            see more of my work on <Link
+                href="https://github.com/thrzl"
+                rel="me"
+                class="u-url">github</Link
+            >
+        </p>
+    </div>
     {
         album && (
             <p>

@@ -9,22 +9,31 @@ import dayjs from "dayjs";
     title="garden"
     description="a collection of notes. largely opinions or project logs"
 >
-    <h1>blog</h1>
+    <h1 class="p-name">blog</h1>
     <p>a collection of notes. largely opinions or project logs</p>
-    <div class="mb-4">
+    <div class="mb-4 h-feed">
         {
             posts.map((post) => (
-                <div class="my-4">
-                    <Link class="mb-0" href={`/garden/${post.data.slug}`}>
+                <div class="my-4 h-entry">
+                    <p hidden class="p-author">
+                        thrzl
+                    </p>
+                    <Link
+                        class="mb-0 p-name u-url"
+                        href={`/garden/${post.data.slug}`}
+                    >
                         {post.data.title}
                     </Link>{" "}
-                    <span class="op-50">
+                    <time
+                        class="op-50 dt-published"
+                        datetime={post.data.date.toISOString()}
+                    >
                         ·{" "}
                         {dayjs(post.data.date)
                             .format("MMM DD, YYYY")
                             .toLocaleLowerCase()}
-                    </span>
-                    <p class="my-1">{post.data.description}</p>
+                    </time>
+                    <p class="my-1 p-summary">{post.data.description}</p>
                 </div>
             ))
         }

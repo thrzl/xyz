@@ -33,30 +33,40 @@ if (frontmatter.data.image) {
 ---
 
 <HTML title={frontmatter.data.title} description={frontmatter.data.description}>
-    {
-        img && (
-            <Image
-                src={img?.default}
-                class="w-100"
-                alt="header image"
-                class="block my-4 rounded-lg"
-            />
-        )
-    }
-    <Link href="/projects">projects</Link><span class="text-accent">
-        /
-    </span><Link active href={`/projects/${frontmatter.data.slug}`} class="mb-0"
-        >{frontmatter.data.title}</Link
-    >
-    <div class="flex flex-row justify-between px-0.5">
-        <p class="my-0 italic op-50">{frontmatter.data.description}</p>
-        <p class="op-50 italic m-0 w-max text-right text-nowrap flex items-end">
-            {frontmatter.data.tags.join(" / ")}
-        </p>
-    </div>
-    <div class="mb-4 line-height-normal">
-        <Content components={{ a: Link }} />
-    </div>
+    <article class="h-entry">
+        <header>
+            {
+                img && (
+                    <Image
+                        src={img?.default}
+                        class="w-100"
+                        alt="header image"
+                        class="block my-4 rounded-lg"
+                    />
+                )
+            }
+            <Link href="/projects">projects</Link><span class="text-accent">
+                /
+            </span><Link
+                active
+                href={`/projects/${frontmatter.data.slug}`}
+                class="mb-0">{frontmatter.data.title}</Link
+            >
+            <div class="flex flex-row justify-between px-0.5">
+                <p class="my-0 italic op-50 p-summary">
+                    {frontmatter.data.description}
+                </p>
+                <p
+                    class="op-50 italic m-0 w-max text-right text-nowrap flex items-end"
+                >
+                    {frontmatter.data.tags.join(" / ")}
+                </p>
+            </div>
+        </header>
+        <div class="mb-4 line-height-normal e-content">
+            <Content components={{ a: Link }} />
+        </div>
+    </article>
 </HTML>
 
 <style is:global>
