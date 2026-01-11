@@ -7,6 +7,10 @@ import { getPalette } from "../lib/colors";
 const album = await getAlbum();
 const palette = getPalette(await getColors(album));
 const { dominant, textColor, secondaryTextColor } = palette;
+
+const { title: pageTitle, description } = Astro.props;
+
+let title = pageTitle ? `${pageTitle} / thrizzle` : "thrizzle";
 ---
 
 <html lang="en">
@@ -32,8 +36,11 @@ const { dominant, textColor, secondaryTextColor } = palette;
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="viewport" content="width=device-width" />
         <meta name="generator" content={Astro.generator} />
-        <title>thrizzle</title>
+        <title>{title}</title>
+        <meta name="title" content={title} />
+        {description && <meta name="description" content={description} />}
     </head>
+
     <body
         class="min-h-screen flex flex-col gap-2 justify-center items-center py-24"
     >
@@ -42,57 +49,57 @@ const { dominant, textColor, secondaryTextColor } = palette;
             <Nav />
         </main>
     </body>
-</html>
 
-<style
-    is:global
-    define:vars={{
-        dominant,
-        textColor,
-        secondaryTextColor,
-        accent: palette.palette[0],
-    }}
->
-    * {
-        box-sizing: border-box;
-        cursor: default;
-    }
-    body {
-        font-family: "Helvetica Neue", sans-serif;
-        background-color: var(--dominant, #e9e7d7);
-        color: var(--textColor, black);
-        --dominant: var(--dominant, #e9e7d7);
-        --textColor: var(--textColor, black);
-        --secondaryTextColor: var(--secondaryTextColor, white);
-        --accent: var(--accent, blue);
-        margin: 0;
-    }
-    a[data-active="true"],
-    a:hover {
-        background-color: var(--accent, blue);
-        color: var(--secondaryTextColor, white);
-        cursor: pointer;
-    }
-    .link-arrow {
-        color: var(--accent, blue);
-    }
-    a:hover .link-arrow {
-        color: var(--secondaryTextColor, white);
-    }
-    a {
-        color: var(--accent, blue);
-    }
-    a[href^="http"] {
-        white-space: nowrap;
-        text-wrap: wrap;
-    }
-    h1 {
-        background-color: var(--accent, blue);
-        color: var(--secondaryTextColor, white);
-        font-size: 1rem;
-        margin: 0 -0.125rem;
-        padding: 0 0.125rem;
-        width: max-content;
-        font-weight: normal;
-    }
-</style>
+    <style
+        is:global
+        define:vars={{
+            dominant,
+            textColor,
+            secondaryTextColor,
+            accent: palette.palette[0],
+        }}
+    >
+        * {
+            box-sizing: border-box;
+            cursor: default;
+        }
+        body {
+            font-family: "Helvetica Neue", sans-serif;
+            background-color: var(--dominant, #e9e7d7);
+            color: var(--textColor, black);
+            --dominant: var(--dominant, #e9e7d7);
+            --textColor: var(--textColor, black);
+            --secondaryTextColor: var(--secondaryTextColor, white);
+            --accent: var(--accent, blue);
+            margin: 0;
+        }
+        a[data-active="true"],
+        a:hover {
+            background-color: var(--accent, blue);
+            color: var(--secondaryTextColor, white);
+            cursor: pointer;
+        }
+        .link-arrow {
+            color: var(--accent, blue);
+        }
+        a:hover .link-arrow {
+            color: var(--secondaryTextColor, white);
+        }
+        a {
+            color: var(--accent, blue);
+        }
+        a[href^="http"] {
+            white-space: nowrap;
+            text-wrap: wrap;
+        }
+        h1 {
+            background-color: var(--accent, blue);
+            color: var(--secondaryTextColor, white);
+            font-size: 1rem;
+            margin: 0 -0.125rem;
+            padding: 0 0.125rem;
+            width: max-content;
+            font-weight: normal;
+        }
+    </style>
+</html>

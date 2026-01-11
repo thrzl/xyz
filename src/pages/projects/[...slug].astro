@@ -6,8 +6,6 @@ import { render } from "astro:content";
 import { Image } from "astro:assets";
 import "@fontsource-variable/geist-mono";
 
-const projects = await getCollection("projects");
-
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     return projects.map((project) => ({
@@ -34,7 +32,7 @@ if (frontmatter.data.image) {
 }
 ---
 
-<HTML>
+<HTML title={frontmatter.data.title} description={frontmatter.data.description}>
     {
         img && (
             <Image

@@ -34,7 +34,7 @@ if (frontmatter.data.image) {
 const pubDate = dayjs(frontmatter.data.date);
 ---
 
-<HTML>
+<HTML title={frontmatter.data.title} description={frontmatter.data.description}>
     {
         img && (
             <Image
