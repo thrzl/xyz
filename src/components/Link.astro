@@ -1,11 +1,21 @@
 ---
 import Arrow from "../assets/link.svg";
-const { href, active } = Astro.props;
+const { href, active, showGithub } = Astro.props;
 let url = Astro.url.pathname;
 if (url !== "/" && url.endsWith("/")) {
     url = url.slice(0, -1);
 }
 let isExternal = href.startsWith("http");
+let hrefUrl: URL | undefined;
+try {
+    hrefUrl = new URL(href);
+} catch {
+    hrefUrl = undefined;
+}
+let isGithub =
+    (showGithub ?? true) &&
+    isExternal &&
+    new URL(href).hostname === "github.com";
 ---
 
 <span class="inline-flex content-center items-center cursor-pointer">
@@ -13,8 +23,8 @@ let isExternal = href.startsWith("http");
         {href}
         data-active={active}
         class={`decoration-none ${isExternal ? "pl-0.5 -ml-0.5" : "px-0.5 -mx-0.5"}`}
-        ><span class="inline underline cursor-pointer"><slot /></span>{
-            isExternal && <Arrow class="link-arrow cursor-pointer" />
-        }</a
+        ><span class="inline underline cursor-pointer"
+            ><slot />{isGithub && ` (${hrefUrl?.pathname.slice(1)})`}</span
+        >{isExternal && <Arrow class="link-arrow cursor-pointer" />}</a
     ></span
 >
