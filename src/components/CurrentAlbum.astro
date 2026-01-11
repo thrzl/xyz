@@ -1,0 +1,21 @@
+---
+import { getAlbum, getColors } from "@lib/musicData";
+import { getPalette } from "@lib/colors";
+
+const album = await getAlbum();
+const palette = getPalette(await getColors(album));
+---
+
+<div class="w-full">
+    <img
+        src={`https://wsrv.nl/?url=https://coverartarchive.org/release/${album?.mbid}/front-500`}
+        class="w-full"
+    />
+    <div class="flex flex-row">
+        {
+            palette.palette.map((color) => (
+                <div class="h-12 flex-1" style={`background-color: ${color}`} />
+            ))
+        }
+    </div>
+</div>
