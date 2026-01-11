@@ -1,4 +1,4 @@
-const ALBUM_MBID = "79c54ad8-66db-4991-b1d6-a7cef54b9c4f";
+const ALBUM_MBID = "2dc32f3f-9ef8-4a37-bd0b-b92f5bf9f096";
 
 type MusicBrainzLookup = {
   "cover-art-archive": {
