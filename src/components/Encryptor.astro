@@ -13,6 +13,7 @@ import "@fontsource-variable/geist-mono";
     ) as HTMLTextAreaElement;
 
     let encrypted = false;
+    let lastEncrypted: Uint8Array;
 
     async function encrypt(text: string) {
         const encryptor = new Encrypter();
@@ -28,18 +29,37 @@ import "@fontsource-variable/geist-mono";
             submitButton.innerText = "copied";
             setTimeout(() => (submitButton.innerText = "copy"), 500);
         } else {
-            input.value = await encrypt(input.value);
+            const encryptedOutput = await encrypt(input.value);
+            input.value = encryptedOutput;
+            lastEncrypted = new Uint8Array(
+                await crypto.subtle.digest(
+                    "SHA-256",
+                    new TextEncoder().encode(encryptedOutput),
+                ),
+            );
             encrypted = true;
             submitButton.innerText = "copy";
         }
     });
 
-    input.addEventListener("input", (e) => {
-        if (submitButton.innerText === "copy") {
+    input.addEventListener("input", async (e) => {
+        const hash = new Uint8Array(
+            await crypto.subtle.digest(
+                "SHA-256",
+                new TextEncoder().encode(input.value),
+            ),
+        );
+        const hashesMatch = lastEncrypted
+            ? hash.every((value, i) => lastEncrypted[i] === value)
+            : false;
+        if (hashesMatch) {
+            // if this is the last encrypted value, just return it
+            submitButton.innerText = "copy";
+        } else if (submitButton.innerText === "copy") {
             submitButton.innerText = "encrypt";
         }
         submitButton.disabled = input.value.length === 0;
-        if (encrypted) encrypted = input.value.length !== 0;
+        if (encrypted) encrypted = hashesMatch || input.value.length !== 0;
     });
 </script>
 
