@@ -45,22 +45,33 @@ if (frontmatter.data.image) {
                     />
                 )
             }
-            <Link href="/projects">projects</Link><span class="text-accent">
-                /
-            </span><Link
-                active
-                href={`/projects/${frontmatter.data.slug}`}
-                class="mb-0">{frontmatter.data.title}</Link
-            >
             <div class="flex flex-row justify-between px-0.5">
-                <p class="my-0 italic op-50 p-summary">
-                    {frontmatter.data.description}
-                </p>
-                <p
-                    class="op-50 italic m-0 w-max text-right text-nowrap flex items-end"
-                >
-                    {frontmatter.data.tags.join(" / ")}
-                </p>
+                <div>
+                    <Link href="/projects">projects</Link><span
+                        class="text-accent"
+                    >
+                        /
+                    </span><Link
+                        active
+                        href={`/projects/${frontmatter.data.slug}`}
+                        class="mb-0">{frontmatter.data.title}</Link
+                    >
+                    <p class="my-0 italic op-50 p-summary">
+                        {frontmatter.data.description}
+                    </p>
+                </div>
+                <div class="self-end">
+                    <p
+                        class="op-50 italic m-0 w-max text-right text-nowrap flex justify-self-end"
+                    >
+                        {frontmatter.data.tags.join(" / ")}
+                    </p>
+                    <p
+                        class="op-50 italic m-0 w-max text-right text-nowrap flex items-end justify-self-end"
+                    >
+                        {frontmatter.data.date}
+                    </p>
+                </div>
             </div>
         </header>
         <div class="mb-4 line-height-normal e-content">
