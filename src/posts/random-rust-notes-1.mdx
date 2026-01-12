@@ -1,0 +1,206 @@
+---
+date: 2026-01-11
+title: "random rust notes 1"
+description: "i finally am getting the hang of it!"
+---
+
+while i was working on [chiffrage](/projects/chiffrage), i learned a LOT about rust, and it's honestly now my favorite programming language (i used to hate it)
+
+coming from python and javascript, i was not used to rust in a very, very wide variety of ways. i'm still definitely not an expert, but if you're new to rust, it's important to remember that there is DEFINITELY a reasonable way to do whatever you're trying to do-- that was something that tripped me up often the first time i really tried to learn it.
+
+# error handling
+
+for example, instead of things like `try/except`, rust has `Result`s. they work kind of like this:
+
+```rust
+fn maybe_works(works: bool) -> Result<String, String> {
+    if works {
+        Ok("it worked! yay".to_string())
+    } else {
+        Err("it didn't work, booo".to_string())
+    }
+}
+
+fn main() {
+    // now we can use it here!
+    // lets say we have one that DIDN'T
+    let result = maybe_works(false)
+}
+```
+
+the `Result` type is an enum between `Ok` and `Err`, but it also has a variety of utility functions that you can use to figure out what's inside.
+
+say we don't actually care what's inside and just want to make sure it worked:
+
+```rust
+fn main() {
+    // now we can use it here!
+    // lets say we have one that DIDN'T
+    let result = maybe_works(false);
+    let worked = assert_eq!(result.is_ok(), false)
+}
+```
+
+easy! but now, let's say i wanted to get what was inside. there's a few ways to do this (`Result::unwrap()` being the worst one), but there's three that i use most often now. cool fact is that these work on `Option`s too, just use `Some` and `None` instead of `Ok` and `Err`:
+
+```rust
+fn maybe_works(works: bool) -> Result<String, MyError> {
+    // method 1 (my favorite): `?`
+    // as long as the `Err` type of  `errors_if_false()` matches,
+    // we can use `?` to just bubble the error
+    let x: String = errors_if_false(works)?;
+    Ok(x)
+}
+
+fn main() {
+    // method 2 (second favorite): `if let`
+    // now, lets say we want to get the inner 
+    // `Ok` value of the function call:
+    let result = maybe_works(false);
+    let value: String = if let Ok(inner_ok_value) = result {
+        inner_ok_value // this is the `x` from earlier!
+    } else {
+        return // this will return the entire `main()` function, btw
+    }
+    
+    // there's another way to do this as well using a `match` block:
+    let value: String = match maybe_works(true) {
+        Ok(inner_ok_value) => inner_ok_value,
+        Err(error) => {
+            println!("{}", error.to_string());
+            return // this will also return the entire fn
+        }
+    };
+}
+```
+
+another quick thing: manipulating `Result`s and `Option`s is super easy:
+
+```rust
+let result: Result<String, MyError> = Ok("test".to_string());
+result.ok() // `Some("test".to_string())`. `None` if `Err`
+
+let option = None;
+result.ok_or(MyError::TestIsNone) // `Err(MyError::TestIsNone)`.
+```
+
+you can also convert types without unwrapping, e.g. if i needed to convert an error type (fairly common):
+```rust
+let result = Err(MyError::TestIsNone)
+
+result.map_err(|e| e.to_string()) // now its `Err("test is none error".to_string())`
+```
+
+# borrowing
+
+in rust, you have to borrow variables and give them back. every value is somewhere in memory; while other languages like python and JS may clone and drop values whenever, rust makes you deal with it yourself
+
+for example:
+
+```rust
+let x = String::from("hi im a string");
+
+my_function(x);
+
+println!(x) // nope! can't do it! this is bad!
+```
+
+because we didn't borrow `x`, `my_function(x)` took ownership and then it just died
+
+there are two options here:
+
+```rust
+let x = String::from("hi im a string");
+
+// note: my_function would need to be 
+// redefined as:
+// fn my_function(x: &String)
+// 
+// `&x` means we're borrowing `x` and it's
+// gonna be given back later
+my_function(&x);
+
+// alternatively, we can just make a clone
+my_function(x.clone());
+
+println!(x) // all is well
+```
+
+there's an important difference between borrowing and cloning though. cloning (usually!) creates an entirely new value, which not only takes time but also literally duplicates the memory. for this reason, it's my understanding that borrowing is better when possible. also, not everything has the `Clone` trait, so sometimes you just have to figure out how to borrow it
+
+# arc
+
+something that can help solve these issues is `Rc` and `Arc`. i personally have only used `Arc`, so that's what i'm going to give an example on
+
+say you need to access the vault object from inside another thread or closure (adapted from [this official rust example](https://doc.rust-lang.org/rust-by-example/std/arc.html)):
+
+```rust
+use std::time::Duration;
+use std::thread;
+
+fn main() {
+    let apple = String::from("the same apple");
+
+    for _ in 0..10 {
+        thread::spawn(move || {
+            println!("{:?}", apple);
+        });
+    }
+
+    // make sure all the threads finish
+    thread::sleep(Duration::from_secs(1));
+}
+```
+
+the compiler will get all mad at you:
+
+```
+error[E0382]: use of moved value: `apple`
+ --> main.rs:8:23
+  |
+5 |     let apple = String::from("the same apple");
+  |         ----- move occurs because `apple` has type `std::string::String`, which does not implement the `Copy` trait
+...
+8 |         thread::spawn(move || {
+  |                       ^^^^^^^ value moved into closure here, in previous iteration of loop
+9 |             println!("{:?}", apple);
+  |                              ----- use occurs due to use in closure
+```
+
+it's pretty much saying that `apple` is getting moved into the closure and then is dropped:
+
+```rust
+for _ in 0..10 {
+    thread::spawn(move || {
+        println!("{:?}", apple);
+        // apple gets dropped here!
+    });
+    
+    // now apple doesn't exist, even in future iterations
+}
+```
+
+to solve this, we can use an `Arc`!
+
+```rust
+use std::sync::Arc;
+
+let apple = Arc::new(String::from("the same apple"));
+
+for _ in 0..10 {
+    // this points to the same place in memory as `apple`
+    // but importantly it is NOT `apple`!
+    let apple = Arc::clone(&apple);
+    
+    thread::spawn(move || {
+        println!("{:?}", apple);
+        // fake "apple" is dropped here
+        // but it's not the actual value
+        // so we don't care
+    });
+}
+
+// ...
+```
+
+i'll write a few more of these as i remember things i learned and as i learn even more
