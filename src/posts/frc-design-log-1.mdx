@@ -1,0 +1,191 @@
+---
+date: 2026-01-16
+title: "FRC design log 1"
+description: "a more in-depth explanation of my code"
+---
+
+quick disclaimer:
+
+> this is intended for my team members, and is rather concise
+> 
+> the code is located [here](https://github.com/teamillusioncmit/frc2026)
+
+i used [uv](https://github.com/astral-sh/uv) instead of pip to manage dependencies
+
+a quick explanation of relevant files and their importance:
+- `pyproject.toml` - defines dependencies and project info. you don't need to pay much attention to this
+- `robot.py` - the "entry point" of the robot code. not much actual logic or anything lies in here
+- `src/` - the bulk of the actual content:
+  - `core.py` - likely what you were looking for in `robot.py`. this file initializes the robot, controller, and subsystems.
+  - `subsystems/` - more specific functionality
+    - `drivetrain.py` - implements mecanum drive and exposes a function
+    - `odometry.py` - not a subsystem in the technical sense, but exposes helpful functions
+    - `vision.py` - implements photonvision (probably also shouldn't be a subsystem, but it is right now)
+- `constants.py` - mostly specifies mechanical information. things like wheel, motor, and chassis specifications
+- `config.toml` - accepts port and camera configuration
+- `config.py` - basically just loads `config.toml`
+
+don't get overwhelmed! i promise it's not bad; you're going to be spending most of your time in `config.toml` and `src/`. speaking of which, `config.toml` literally looks like this:
+
+```toml
+controller_port = 0
+gyro_port = 0
+
+[motors]
+front_right_port = 1
+front_left_port = 2
+
+rear_right_port = 3
+rear_left_port = 4
+
+[vision]
+camera_name = "main"
+```
+
+# the deal with `uv`
+
+`uv` is basically a better, significantly faster `pip`.
+
+to quickly get started (after installing `uv`):
+
+```bash
+uv sync # install all the dependencies
+```
+
+then to run `robotpy`, you can use:
+```bash
+uv run robotpy
+```
+
+---
+
+
+
+
+the code itself is pretty basic, aside from a few things i did for performance/safety:
+
+# helper types
+
+i use quite a few helper types across the code, and there's two main types:
+
+**msgspec**
+
+[msgspec](https://github.com/jcrist/msgspec) is a module that allows us to create classes that are very performant and can load/access data very quickly. it's primarily used in the `config.py` module to load the configuration data.
+
+**`NamedTuple`s**
+
+under the hood, it's a tuple (an immutable array, basically), but it allows me to name the items so that i can access them more easily.
+
+this is probably the most notable example, from `src/subsystems/vision.py`
+
+```py
+class PhotonPoseEstimation(NamedTuple):
+    pose: Pose2d
+    timestamp: float
+
+    @classmethod
+    def from_estimation(cls, estimate: EstimatedRobotPose):
+        return cls(
+            pose=estimate.estimatedPose.toPose2d(),
+            timestamp=estimate.timestampSeconds,
+        )
+```
+
+under the hood, it's basically `(Pose2d(), 0.0)`, but i can access the items by using `pose_estimation.pose` or `pose_estimation.timestamp`. additionally, i can define functions, like `from_estimation` which allows me to easily create an object from an `EstimatedRobotPose`.
+
+
+# `__slots__`
+
+there's only one other concept that you may not have seen before, which is `__slots__`. when we know in advance exactly what the class will look like, we can declare all of its attributes in a tuple as `__slots__`, like i did here:
+
+```py
+class RobotCore:
+    """
+    the core of the robot's functionality.
+    """
+
+    __slots__ = ("controller", "gyro", "drivetrain", "odometry", "vision")
+    
+    ...
+```
+
+because `controller`, `gyro`, `drivetrain`, `odometry`, and `vision` are the only attributes `RobotCore` will ever have, we can define them, which has the following two benefits:
+1. `RobotCore` will use less memory
+2. accessing these attributes will be faster
+
+when in a resource-constrained environment like the roboRIO where we're going to be accessing each of these attributes at least 50 times per second, this efficiency counts.
+
+# constants
+
+to define constants, i use the [pint](https://github.com/hgrecco/pint) library. it allows you to easily manage and convert between different units, which is helpful especially when FRC gives us measurements in feet that we need in meters. for example:
+
+```py
+from pint import UnitRegistry
+
+units = UnitRegistry()
+
+# FRC defines AprilTag widths as 8 1/8 inches, but we need it in meters
+APRILTAG_WIDTH = (8.125 * units.inch).to(units.meter)
+```
+
+importantly, `APRILTAG_WIDTH` here is a `Quantity` type now, not a `float`. to get it as a `float`, you can use the `magnitude` attribute:
+
+```py
+APRILTAG_WIDTH # <Quantity(0.206375, 'meter')>
+
+APRILTAG_WIDTH.magnitude # 0.206375
+```
+
+# the `commands2` framework
+
+this is one of the most important concepts to understand. wpilib now lets us define actions as **commands**, allowing us to write much prettier and understandable code. when before we would have had to write:
+
+```py
+if controller.getBButton():
+  arm.raise_arm()
+if controller.getXButton():
+  arm.lower_arm()
+
+if abs(controller.getYAxis()) > 0 or abs(controller.getXAxis()) > 0:
+  drivetrain.drive()
+  
+# and so on for every single thing...
+```
+
+now, we could write:
+
+```py
+# if B is pressed and X is not
+controller.b().and_(controller.x().not_()).onTrue(
+    RunCommand(arm.raise_arm, arm)
+)
+
+# when X is pressed
+controller.x().onTrue(RunCommand(arm.lower_arm, arm))
+
+# just run this every time
+drivetrain.setDefaultCommand(
+    RunCommand(
+        lambda: drivetrain.drive(),
+        drivetrain,
+    )
+)
+```
+
+the biggest benefit in my opinion is that is also makes it easier to run things concurrently. in the previous setup, if `raise_arm()` took some time to run, the code would get stuck there and wouldn't run `drive()` until `raise_arm()` was done, meaning that raising the arm would lock the drive system. the command framework doesn't work that way, as multiple commands can run at the same time.
+
+# `periodic()` functions
+
+the last major thing, periodic functions are run once every 20ms for a total of 50 times per second. i don't use periodic functions frequently because there simply aren't many things that i need to run in the background as opposed to based on user input, but i do importantly update odometry from there in `src/core.py`:
+
+```py
+class RobotCore:
+    ...
+    
+    def periodic(self):
+        vision_estimate = self.vision.estimate_position()
+        wheel_positions = self.drivetrain.encoders.get_wheel_positions()
+        self.odometry.update_odometry(
+            wheel_positions, self.gyro.getAngle(), vision_estimate
+        )
+```
