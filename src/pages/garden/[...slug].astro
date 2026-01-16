@@ -6,7 +6,7 @@ import { render } from "astro:content";
 import { Image } from "astro:assets";
 import dayjs from "dayjs";
 import "@fontsource-variable/geist-mono";
-
+import "@styles/markdown.css";
 export async function getStaticPaths() {
     return posts.map((post) => ({
         params: {
@@ -78,25 +78,5 @@ const pubDate = dayjs(frontmatter.data.date);
     img {
         width: 100%;
         height: auto;
-    }
-    h2#footnote-label {
-        text-transform: lowercase;
-    }
-    blockquote {
-        padding: 0.1rem 1rem;
-        background-color: var(--accent);
-        margin: 0;
-        border-left: 2px solid var(--accent);
-    }
-    blockquote * {
-        color: var(--secondaryTextColor);
-    }
-    pre {
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-    }
-    pre,
-    code {
-        font-family: "Geist Mono Variable", monospace;
     }
 </style>
