@@ -1,0 +1,42 @@
+---
+title: getting started
+startDate: 2025-01-01
+description: get started encrypting files with chiffrage & age encryption
+tags: ["blah", "blah"]
+---
+
+<p> </p>
+
+# a short overview of age & asymmetric encryption
+
+age encryption uses [public-key (asymmetric) encryption](https://ssd.eff.org/glossary/public-key-encryption) in which you have a keypair:
+
+- your **public key** is safe to share. files encrypted to your public key will be possible to decrypt with...
+- your **private key**, which should NEVER be shared unless you want someone else to decrypt your files.
+
+> note: age does not support **signing**, which means that the _integrity_ of a file encrypted to you cannot be proven. for example, if alice was supposed to encrypt a file to you, i could encrypt my own file and swap it in and there's no way for you to know the difference. the [official advice](https://words.filippo.io/age-authentication/#age-is-already-authenticated) is to keep the public key a secret as well when you want to be able to verify integrity. thankfully, age keys are cheap, and there is no real issue with generating a new one whenever you want.
+
+in short:
+
+- if you want to encrypt files to yourself, just encrypt them to your own key
+- if you want to encrypt files to others, you need their public key
+
+# key management
+
+chiffrage allows you to manage keys in one place rather than having to worry about keeping the text safe or organized. you can generate your first keypair by pressing "new keypair" after creating your vault:
+
+![home page](../../assets/imgs/projects/chiffrage/empty-home.png)
+
+all that is required to generate a key is a name, in contrast to PGP's email requirement:
+
+![generate key](../../assets/imgs/projects/chiffrage/generate-key.png)
+
+after generating your key, click on it to view its details:
+
+![key info](../../assets/imgs/projects/chiffrage/key-info.png)
+
+from this dialog, you can share your public key, as well as export your keypair or remove it from the vault altogether.
+
+> did you notice? chiffrage defaults to quantum-resistant MLKEM768-X25519 keys, which unfortunately come at the cost of very long public keys and small but growing usage. using the "convert to x25519" button, you can view it as a standard (quantum-vulnerable) X25519 public key.
+
+you can also import keys from a file or from text using the "import key" button on the keys page.
