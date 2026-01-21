@@ -5,25 +5,35 @@ tags: ["rust", "tauri", "age"]
 startDate: 2025-11-01
 ---
 
-import {Image} from "astro:assets"
-import chiffrageIcon from "@assets/imgs/projects/chiffrage/icon.png"
+import { Image } from "astro:assets";
+import chiffrageIcon from "@assets/imgs/projects/chiffrage/icon.png";
 
-<Image src={chiffrageIcon} alt="chiffrage logo" class="mx-auto w-16 block mt-4" />
+<Image
+  src={chiffrageIcon}
+  alt="chiffrage logo"
+  class="mx-auto w-16 block mt-4"
+/>
 
 chiffrage is a cross-platform GUI for the [age encryption format](https://age-encryption/) that also provides key management features. it relies on the [rage](https://github.com/str4d/rage) crate, which is a rust implementation of the age format.
 
 ## getting started
 
 ### a short overview of age & asymmetric encryption
+
 age encryption uses [public-key (asymmetric) encryption](https://ssd.eff.org/glossary/public-key-encryption) in which you have a keypair:
+
 - your **public key** is safe to share. files encrypted to your public key will be possible to decrypt with...
 - your **private key**, which should NEVER be shared unless you want someone else to decrypt your files.
 
+> note: age does not support **signing**, which means that the _integrity_ of a file encrypted to you cannot be proven. for example, if alice was supposed to encrypt a file to you, i could encrypt my own file and swap it in and there's no way for you to know the difference. the [official advice](https://words.filippo.io/age-authentication/#age-is-already-authenticated) is to keep the public key a secret as well when you want to be able to verify integrity. thankfully, age keys are cheap, and there is no real issue with generating a new one whenever you want.
+
 in short:
+
 - if you want to encrypt files to yourself, just encrypt them to your own key
 - if you want to encrypt files to others, you need their public key
 
 ### key management
+
 chiffrage allows you to manage keys in one place rather than having to worry about keeping the text safe or organized. you can generate your first keypair by pressing "new keypair" after creating your vault:
 
 ![home page](../assets/imgs/projects/chiffrage/empty-home.png)
@@ -59,6 +69,7 @@ furthermore, as keys are encrypted independently, an attacker cannot just get th
 ### secure defaults
 
 chiffrage will terrorize you quite a bit when trying to make decisions that may sacrifice security. a short list of defaults are:
+
 - defaults to MLKEM768-X25519 keys, which are quantum-safe
 - warnings when trying to mix them with standard X25519 keys
 - warnings + advice when creating poor passwords
