@@ -5,13 +5,17 @@ import { getCollection } from "astro:content";
 import { render } from "astro:content";
 import { Image } from "astro:assets";
 import "@fontsource-variable/geist-mono";
-import "@styles/markdown.css"
+import "@styles/markdown.css";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
     return projects.map((project) => ({
         params: {
-            slug: project.data.slug,
+            slug: project
+                .filePath!.replace(/.mdx?/, "")
+                .split("/")
+                .slice(2)
+                .join("/"),
         },
         props: {
             frontmatter: project,
@@ -31,6 +35,19 @@ if (frontmatter.data.image) {
         default: ImageMetadata;
     };
 }
+function enumerate<T>(arr: T[]): [number, T][] {
+    let obj: Record<number, T> = {};
+    for (let i = 0; i < arr.length; ++i) {
+        obj[i] = arr[i];
+    }
+    return Object.entries(obj).map((e) => [Number.parseInt(e[0]), e[1]]);
+}
+function breadcrumbs() {
+    const slug = Astro.url.pathname.slice(1).split("/");
+    const slugParts = enumerate(slug);
+    return slugParts.map(([i, path]) => [...slug.slice(0, i), path].join("/"));
+}
+const breadcrumbLinks = breadcrumbs();
 ---
 
 <HTML title={frontmatter.data.title} description={frontmatter.data.description}>
@@ -48,31 +65,39 @@ if (frontmatter.data.image) {
             }
             <div class="flex flex-row justify-between px-0.5">
                 <div>
-                    <Link href="/projects">projects</Link><span
-                        class="text-accent"
-                    >
-                        /
-                    </span><Link
-                        active
-                        href={`/projects/${frontmatter.data.slug}`}
-                        class="mb-0">{frontmatter.data.title}</Link
-                    >
+                    {
+                        enumerate(breadcrumbLinks).map(([i, link]) => (
+                            <>
+                                <Link
+                                    href={`/${link}`}
+                                    active={i === breadcrumbLinks.length - 1}
+                                >
+                                    {i === breadcrumbLinks.length - 1
+                                        ? frontmatter.data.title
+                                        : link.split("/").slice(-1)}
+                                </Link>
+                                {i !== breadcrumbLinks.length - 1 && (
+                                    <span class="text-accent"> / </span>
+                                )}
+                            </>
+                        ))
+                    }
                     <p class="my-0 italic op-50 p-summary">
                         {frontmatter.data.description}
                     </p>
                 </div>
-                <div class="self-end">
-                    <p
-                        class="op-50 italic m-0 w-max text-right text-nowrap flex justify-self-end"
-                    >
-                        {frontmatter.data.tags.join(" / ")}
-                    </p>
-                    <p
-                        class="op-50 italic m-0 w-max text-right text-nowrap flex items-end justify-self-end"
-                    >
-                        {frontmatter.data.date}
-                    </p>
-                </div>
+                {
+                    Astro.url.pathname.slice(1).split("/").length <= 2 && (
+                        <div class="self-end">
+                            <p class="op-50 italic m-0 w-max text-right text-nowrap flex justify-self-end">
+                                {frontmatter.data.tags.join(" / ")}
+                            </p>
+                            <p class="op-50 italic m-0 w-max text-right text-nowrap flex items-end justify-self-end">
+                                {frontmatter.data.date}
+                            </p>
+                        </div>
+                    )
+                }
             </div>
         </header>
         <div class="mb-4 line-height-normal e-content">
