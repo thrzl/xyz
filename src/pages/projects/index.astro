@@ -3,15 +3,19 @@ import HTML from "@layouts/HTML.astro";
 import Link from "@components/Link.astro";
 import { getCollection } from "astro:content";
 
-const projects = await getCollection("projects");
+let projects = await getCollection("projects");
 const farFuture = new Date("3005-12-31");
-projects.sort(
-    (a, b) =>
-        (b.data.endDate ?? farFuture).getTime() -
-            (a.data.endDate || farFuture).getTime() || // sort by end date
-        b.data.startDate.getTime() - a.data.startDate.getTime() ||
-        a.data.title.localeCompare(b.data.title), // then by start year
-);
+projects = projects
+    .sort(
+        (a, b) =>
+            (b.data.endDate ?? farFuture).getTime() -
+                (a.data.endDate || farFuture).getTime() || // sort by end date
+            b.data.startDate.getTime() - a.data.startDate.getTime() ||
+            a.data.title.localeCompare(b.data.title), // then by start year
+    )
+    .filter((entry) => {
+        return entry.filePath.split("/").length === 3;
+    }); // only get top level posts
 // const projects = [
 //     {
 //         name: "chiffrage",
