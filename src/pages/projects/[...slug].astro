@@ -43,7 +43,7 @@ function enumerate<T>(arr: T[]): [number, T][] {
     return Object.entries(obj).map((e) => [Number.parseInt(e[0]), e[1]]);
 }
 function breadcrumbs() {
-    const slug = Astro.url.pathname.slice(1).split("/");
+    const slug = Astro.url.pathname.replace(/\/$/).slice(1).split("/");
     const slugParts = enumerate(slug);
     return slugParts.map(([i, path]) => [...slug.slice(0, i), path].join("/"));
 }
