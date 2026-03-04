@@ -1,4 +1,4 @@
-const ALBUM_MBID = "0f2578ad-cfa7-4ca3-ab93-24c7733930f7";
+const ALBUM_MBID = "5e55c958-2d2a-47f8-b321-e1e2b9243052";
 
 type MusicBrainzLookup = {
   "cover-art-archive": {
@@ -26,12 +26,12 @@ type ListenBrainzStatsRes = {
       artist_mbids?: string[];
       artist_name: string;
       artists:
-        | {
-            artist_credit_name: string;
-            artist_mbid: string;
-            join_phrase: string;
-          }[]
-        | null;
+      | {
+        artist_credit_name: string;
+        artist_mbid: string;
+        join_phrase: string;
+      }[]
+      | null;
       caa_id: string | null;
       release_mbid?: string | null;
       release_name: string;
@@ -80,14 +80,14 @@ export async function getAlbum(): Promise<MinimalAlbum | undefined> {
   topAlbum =
     topResult !== undefined
       ? {
-          title: topResult.release_name,
-          artists: (topResult.artists || []).map((artist) => ({
-            name: artist.artist_credit_name,
-            joinPhrase: artist.join_phrase,
-            mbid: artist.artist_mbid,
-          })),
-          mbid: topResult.release_mbid!,
-        }
+        title: topResult.release_name,
+        artists: (topResult.artists || []).map((artist) => ({
+          name: artist.artist_credit_name,
+          joinPhrase: artist.join_phrase,
+          mbid: artist.artist_mbid,
+        })),
+        mbid: topResult.release_mbid!,
+      }
       : undefined;
   return topAlbum;
 }
