@@ -37,12 +37,15 @@ const album = await getAlbum();
                     {album.title.toLocaleLowerCase()}
                 </Link>{" "}
                 by{" "}
-                {album.artists?.map((artist) => (
-                    <Link
-                        href={`https://listenbrainz.org/artist/${artist.mbid}`}
-                    >
-                        {artist.name.toLocaleLowerCase()}
-                    </Link>
+                {album.artists?.map((artist, i) => (
+                    <>
+                        <Link
+                            href={`https://listenbrainz.org/artist/${artist.mbid}`}
+                        >
+                            {artist.name.toLocaleLowerCase()}
+                        </Link>
+                        {i < album.artists.length - 1 && "+ "}
+                    </>
                 ))}
             </p>
         )
