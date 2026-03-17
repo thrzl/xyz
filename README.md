@@ -1,4 +1,4 @@
-thrzl.xyz
+twofortyeight.net
 
 ```sh
 # start dev server

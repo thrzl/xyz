@@ -11,4 +11,5 @@ export default defineConfig({
       extendMarkdownConfig: true,
     }),
   ],
+  site: "https://twofortyeight.net",
 });

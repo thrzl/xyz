@@ -98,7 +98,7 @@ export async function getColors(
   if (!album) return [];
   if (topAlbumColors) return topAlbumColors;
   const paletteRes = await fetch(
-    `https://calore.thrzl.xyz/?image=https://coverartarchive.org/release/${album?.mbid}/front`,
+    `https://calore.twofortyeight.net/?image=https://coverartarchive.org/release/${album?.mbid}/front`,
   );
 
   const { palette }: { palette: [number, number, number][] } =

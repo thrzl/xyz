@@ -10,7 +10,9 @@ const { dominant, textColor, secondaryTextColor } = palette;
 
 const { title: pageTitle, description } = Astro.props;
 
-let title = pageTitle ? `${pageTitle} / thrizzle` : "thrizzle";
+let title = pageTitle
+    ? `${pageTitle} / twofortyeight.net`
+    : "twofortyeight.net";
 ---
 
 <html lang="en">
@@ -51,8 +53,8 @@ let title = pageTitle ? `${pageTitle} / thrizzle` : "thrizzle";
     </body>
 
     <script>
-    import listen from "micromorph/nav";
-    listen();
+        import listen from "micromorph/nav";
+        listen();
     </script>
     <style
         is:global
