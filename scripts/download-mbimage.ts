@@ -8,10 +8,10 @@ const spinner = yoctoSpinner({text: 'clearing old images'}).start();
 // check for existing album images
 const mbidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\.jpg$/g
 let foundExistingImage = false;
-const existingImages = await readdir("public/imgs")
+await readdir("public/imgs")
     .then(files => files.forEach(async file => {
         if (mbidRegex.test(file)) {
-            if (file === `${ALBUM_MBID}.jpg`) {
+            if (file === `${ALBUM_MBID}.jpg`) { // if the file's alr there
                 spinner.info(`existing image for album ${ALBUM_MBID} found. will not download.`);
                 foundExistingImage = true;
                 return
@@ -22,7 +22,7 @@ const existingImages = await readdir("public/imgs")
     .catch(() => []);
 
 if (foundExistingImage) {
-    spinner.success("old images cleared, existing image found, skipping download");
+    spinner.success("old images cleared, existing image found, skipping download"); // dont delete if the current image is there
     process.exit(0);
 }
 

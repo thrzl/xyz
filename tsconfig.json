@@ -9,7 +9,7 @@
 			"@lib/*": ["./src/lib/*"],
 			"@assets/*": ["./src/assets/*"],
 			"@styles/*": ["./src/styles/*"]
-		}
-	},
-	"types": ["bun"]
+		},
+		"types": ["bun"]
+	}
 }
