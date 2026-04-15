@@ -10,5 +10,6 @@
 			"@assets/*": ["./src/assets/*"],
 			"@styles/*": ["./src/styles/*"]
 		}
-	}
+	},
+	"types": ["bun"]
 }

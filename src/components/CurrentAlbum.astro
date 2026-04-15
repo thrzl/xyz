@@ -7,10 +7,7 @@ const palette = getPalette(await getColors(album));
 ---
 
 <div class="w-full">
-    <img
-        src={`https://wsrv.nl/?url=https://coverartarchive.org/release/${album?.mbid}/front-1200`}
-        class="w-full"
-    />
+    <img src={`/imgs/${album?.mbid}.jpg`} class="w-full" />
     <div class="flex flex-row">
         {
             palette.palette.map((color) => (
