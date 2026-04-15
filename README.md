@@ -8,7 +8,9 @@ bun dev
 bun run build
 
 # preview static build
-bun run build
+bun run preview
 ```
+
+bun is required to download album art images
 
 built with astro & unoCSS
