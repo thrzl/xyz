@@ -6,13 +6,11 @@ startDate: 2025-11-01
 ---
 
 import { Image } from "astro:assets";
-import chiffrageIcon from "@assets/imgs/projects/chiffrage/icon.png";
+import ChiffrageIcon from "@assets/imgs/projects/chiffrage/chiffrage-icon.astro";
 
-<Image
-  src={chiffrageIcon}
-  alt="chiffrage logo"
-  class="mx-auto w-16 block mt-4"
-/>
+<ChiffrageIcon class="mx-auto w-16 h-16 block mt-4 color-accent" />
+
+
 
 chiffrage is a cross-platform GUI for the [age encryption format](https://age-encryption/) that also provides key management features. it relies on the [rage](https://github.com/str4d/rage) crate, which is a rust implementation of the age format.
 
